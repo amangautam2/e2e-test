@@ -87,35 +87,12 @@ describe('User e2e test cases', () => {
             expect(user.title).toEqual(mockedUser[0].title);
 
         });
-
-        it('should return create a new user', async () => {
-
-    	    const { body } = await request(app.getHttpServer())
-                    .post('/user')
-                    .set('Accept', 'application/json')
-                    .send(mockedUsers[0])
-                    .expect(HttpStatus.OK);
-
-    	    expect(body.data).toHaveProperty(token);
-
-            token = body.data.token;
-
-    	    const user = await this.userRepository.findOne({
-    		      username: mockedUsers[0].username
-            });
-
-            expect(user.username).toEqual(mockedUser[0].username);
-            expect(user.first_name).toEqual(mockedUser[0].first_name);
-            expect(user.last_name).toEqual(mockedUser[0].last_name);
-            expect(user.title).toEqual(mockedUser[0].title);
-
-        });
     });
 
-    describe("GET /users", () => {
+    describe("GET /user", () => {
         it('should return error for unauthorized', async () => {
             const { body } = await request(app.getHttpServer())
-                .get(`/users`)
+                .get(`/user`)
                 .set('authorization', `Bearer someRandomToken0123456789`)
                 .send()
                 .expect(HttpStatus.FORBIDDEN);
@@ -126,7 +103,7 @@ describe('User e2e test cases', () => {
         it('should find the user', async () => {
 
             const { body } = await request(app.getHttpServer())
-                .get(`/users`)
+                .get(`/user`)
                 .set('authorization', `Bearer ${token}`)
                 .send()
                 .expect(HttpStatus.NOT_FOUND);
